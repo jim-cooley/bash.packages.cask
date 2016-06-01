@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo tcpdump -w /Users/common/logs/network-%F.%T.log -s 1024 -B 65536 -G 3600 -k -tttt -n -S -N -# -z gzip

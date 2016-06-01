@@ -1,0 +1,10 @@
+#!/bin/bash
+m=$1
+d=$2
+t=$3
+NETLOG="`printf "/Users/volumes/logs/network/network-2015-%s-%s.%s" $1 $2 $3`"
+ls "$NETLOG"*.log
+
+TCPDUMP=`printf "tcpdump -r /Users/volumes/logs/network/network-2015-%s-%s.%s*.log -N -S -n -tttt -l -k" $1 $2 $3`
+
+$TCPDUMP

@@ -1,0 +1,4 @@
+# crypto / working with keys 'n such
+alias rsakey='ssl-rsakey-fingerprint'
+alias fingerprint=rsakey
+alias fp=fingerprint

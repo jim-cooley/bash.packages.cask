@@ -1,0 +1,3 @@
+alias trace='set -xv'
+alias troff='set +xv'
+alias tron=trace

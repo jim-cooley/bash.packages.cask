@@ -1,0 +1,1 @@
+alias sshdebug='echo "use ssh -vvv [servername] & review authlog"'

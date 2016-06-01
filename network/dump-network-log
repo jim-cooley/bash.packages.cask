@@ -1,0 +1,1 @@
+tcpdump -r /Users/common/logs/network-2015-$1.log -# -N -S -n -tttt -l -k

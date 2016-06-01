@@ -1,62 +1,104 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# project specific
+.links
+_*/
 
-# C extensions
+# JAVA stuff
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+*.pyc
+*.pyo
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
 *.so
+*.so.*
+*.dylib
 
-# Distribution / packaging
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+# Debug files
+*.dSYM/
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+# backups & temp/log files:
+*.swp
+/bin
+*/tmp
+tmp/
+log/
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
+# Other dev-related files
+*.git.properties
+*.espressostorage
+*.bak
+*.orig
+*.sass-cache
+.directory
+*~
+.svn/*
+*.swp
+svn-commit.*
+tags
+TAGS
+
+# IDE specific
+target
+.classpath
+.project
+.idea
+.settings
+.settings/*
+*.iml
+dwsync.xml
+*.tmp
+*.wpr
+*.project
+*.cproject
+*.tmproj
+*.tmproject
+*.vi
+*.komodoproject
+.komodotools
+nbproject
+
+# OSX files
+._*
 .cache
-nosetests.xml
-coverage.xml
-*,cover
-.hypothesis/
+.Spotlight-V100
+.Trashes
+.DS_Store
+desktop.ini
+ehthumbs.db
+Thumbs.db
 
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-#Ipython Notebook
-.ipynb_checkpoints
+# Sublime Editor
+*.sublime-project
+*.sublime-workspace

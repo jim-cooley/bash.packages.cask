@@ -1,0 +1,4 @@
+# vt100 terminal colors
+#
+
+alias colors='displaycolors'

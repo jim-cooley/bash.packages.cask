@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# Deletes Known Government Controlled Root Certs from OSX 10.10
+# WARNING: Do not run unless you understand what this is doing
+# YMMV
+
+#
+# debug
+#
+set +xv
+echo ".$ECHO.${#ECHO}"
+if [ -n "$ECHO" ] ; then
+	set -xv
+fi
+
+#
+# functions:
+
+function print_usage {
+	echo "sec-list-unknown-certs (list | delete)"
+	echo "-h  = print this message"
+	echo "-f  = force on errors"
+	echo "-k  = use keychain file"
+	echo "-v  = verbose output"
+}
+
+function print_error() {
+	printf "ERROR: %s (%s).\n" "$1" "$2"
+	print_usage
+	exit 1
+}
+
+function remove-cert {
+    echo "Removing ${2}"
+    sudo security delete-certificate -t -Z "${1}" "$keychain"
+}
+
+function find-cert {
+	echo ""
+	echo "${2}"
+	sudo security find-certificate -c -Z "${1}" "$keychain"
+}
+
+function fingerprint {
+	if [ "$operation" == "delete" ] ; then
+		remove-cert "${1}" "${2}"
+	else
+		find-cert "${1}" "${2}"
+	fi
+}
+
+#
+# parse arguments
+#
+operation="unknown"
+keychain="/System/Library/Keychains/SystemRootCertificates.keychain"
+while [[ $# -gt 0 ]] ; do
+	case "$1" in
+		-h | --help)
+			print_usage && exit;;
+		-f | --force)
+			force=1 ;;
+	    -k | --keychain)
+			shift ; keychain="${1}" ;;
+		-v | --volume)
+			shift && volume="/Volumes/$1";;
+		list)
+			operation="list";;
+		delete)
+			operation="delete";;
+	esac
+	shift
+done
+
+echo "Processing $operation '$keychain'"
+
+if [ "$operation" == "unknown" ] ; then
+	print_error "operation must be one of (list or delete)"
+fi
+
+#
+# execute
+fingerprint "905F942FD9F28F679B378180FD4F846347F645C1" "Federal Govt Cert"
+fingerprint "B091AA913847F313D727BCEFC8179F086F3A8C0F" "TW Government Root Certification Authority"
+fingerprint "FAA7D9FB31B746F200A85E65797613D816E063B5" "Finland Government Root CA"
+fingerprint "4F99AA93FB2BD13726A1994ACE7FF005F2935D1E" "China Internet Network Information Center Root CA"
+fingerprint "8BAF4C9B1DF02A92F7DA128EB91BACF498604B6F" "CNNIC ROOT"

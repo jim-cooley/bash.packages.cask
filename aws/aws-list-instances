@@ -1,0 +1,17 @@
+#
+#
+aws ec2 describe-instances --query 'Reservations[].Instances[].[LaunchTime, Placement.AvailabilityZone, State.Name, InstanceId, ImageId, SecurityGroups[0].GroupName, KeyName, Tags[?Key==`Prefix`].Value | [0]]' --output text
+
+# with region specifier:
+#aws ec2 describe-instances --region ap-southeast-2 --query 'Reservations[].Instances[].[LaunchTime, Placement.AvailabilityZone, State.Name, InstanceId, ImageId, InstanceType, SecurityGroups[0].GroupName, KeyName, Tags[?Key==`Prefix`].Value | [0]]' --output text
+
+
+# list the regions
+#aws ec2 describe-regions --query 'Regions[].[RegionName,Endpoint]' --output text
+
+# jq: read: http://blog.behrang.org/blog/2015/01/31/filtering-ec2-instances-based-on-tags-using-the-aws-cli-tools/
+#      and: http://stedolan.github.io/jq/
+#aws ec2 describe-instances --output json | jq '.Reservations[].Instances[].[LaunchTime, Placement.AvailabilityZone, State.Name, InstanceId, ImageId, SecurityGroups[0].GroupName, KeyName, (Tags[?Key==`Prefix`].Value)[0]]'
+
+#
+#aws ec2 describe-instances --query 'Instances[*].{LaunchTime,State.Name,InstanceId,ImageId,AvailabilityZone,SecurityGroups[*].GroupName,KeyName,Tags[*]}' > ec2-instance-query.txt

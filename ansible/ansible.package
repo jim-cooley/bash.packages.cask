@@ -1,0 +1,18 @@
+# ansible stuff
+
+# requires: brew
+
+# optional
+
+# actions: install, remove, update, version
+
+# version
+# ansible version
+
+# properties
+#echo "127.0.0.1" > ~/.ansible/hosts
+export ANSIBLE_INVENTORY=~/.ansible/hosts
+export ANSIBLE_HOME="/Volumes/HD3/repository/projects-public/tools/ansible/ansible"
+export ANSIBLE_BIN="$ANSIBLE_HOME/bin"
+
+export PATH="$ANSIBLE_BIN:$PATH"

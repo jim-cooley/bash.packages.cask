@@ -1,0 +1,32 @@
+#
+# imaging
+#
+
+# before you image:
+scutil --set LocalHostName ""
+scutil --set HostName ""
+scutil --set ComputerName ""
+
+# clean up logs - do all the periodic tasks
+sudo periodic daily weekly monthly
+
+# Once the source is mounted in FW Target mode visit /var/log and /Library/Logs and delete all the *.gz and *.bzg compressed 
+
+# Although the disk image creation step can be eliminated and the NetInstall image created directly from the target machine, I like to create the disk image and make a copy read/write so I can make changes to various files without having to boot the source should the need arise.
+
+# Make sure to disable Spotlight indexing for the FW Target drive once it is mounted on the server.
+
+# also, be sure to to delete machine specific network configuration files from your image:
+/Library/Preferences/SystemConfiguration/NetworkInterfaces.plist
+/Library/Preferences/SystemConfiguration/com.apple.network.identification.plist
+/Library/Preferences/SystemConfiguration/preferences.plist
+
+#Usage:	hdiutil create <sizespec> [options] <imagepath>
+	hdiutil create -help
+
+#Usage:	hdiutil mountvol [options] <devname>
+	hdiutil mountvol -help
+
+#Usage:	hdiutil unmount [options] <mountpoint>
+	hdiutil unmount -help
+

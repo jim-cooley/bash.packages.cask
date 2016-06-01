@@ -1,0 +1,4 @@
+#!/bin/bash
+#echo "openssl rsa -in path/to/private_keyfile -pubout -outform DER | openssl md5 -c"
+#openssl rsa -in "$1" -pubout -outform DER | openssl md5 -c
+ssh-keygen -lf "$1"

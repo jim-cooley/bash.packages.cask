@@ -1,0 +1,10 @@
+#!/bin/bash
+
+LOGROOT="/Users/common/logs"
+
+while true ; do 
+	for netlog in "$LOGROOT"/network-`date +"%F"`*.log; do
+		sudo tcpdump -r "$netlog" -# -N -S -n -tttt -l -k
+	done 
+	sleep 300
+done

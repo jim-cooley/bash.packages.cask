@@ -1,0 +1,42 @@
+# vmware projects:
+declare -x VMWARE_ROOT="/Applications/VMware Fusion.app/Contents/Library"
+declare -x VMROOT="/vbox"
+declare -x VMSHARE="$VMROOT/shared"
+
+alias vmware='pushd "$VMWARE_ROOT"'
+alias vmshare='pushd "$VMSHARE"'
+alias vmw=vmware
+alias vms=vmshare
+
+# create symlinks to cli files embedded in VMWare Fusion:
+ln='ln -fs'
+target='/usr/local/bin'
+create_symlinks() {
+    source_dir="$1"
+    target_dir="$2"
+    files_to_link="$3"
+
+    for f in $files_to_link; do
+        echo "linking: $target_dir/$f -> $source_dir/$f"
+        $ln "$source_dir"/$f "$target_dir"/$f
+    done
+}
+
+create_symlinks "$VMWARE_ROOT" "$target" "vmrun mkisofs mkntfs ntfscat ntfscp ntfsls ntfsresize unrar"
+create_symlinks "$VMWARE_ROOT" "$target" "vmnet-bridge vmnet-cfgcli vmnet-cli vmnet-netifup"
+
+create_symlinks "$VMWARE_ROOT" "$target" "vmnet-sniffer vmss2core vmware-aewp vmware-id vmware-ntfs vmware-cloneBootCamp vmware-rawdiskAuthTool vmware-remotemks"
+create_symlinks "$VMWARE_ROOT" "$target" "vmware-vdiskmanager vmware-vmdkserver vsock vmware-vmx"
+
+create_symlinks "$VMWARE_ROOT/vprobes" "$target" "vmware-vprobe emmett"
+
+create_symlinks "$VMWARE_ROOT/shares" "$target" "fusionShareTool"
+
+#for f in
+ln -fs "$VMWARE_ROOT/vmrun" /usr/local/bin/vmrun
+ln -fs "$VMWARE_ROOT/mkisofs" /usr/local/bin/mkisofs
+ln -fs "$VMWARE_ROOT/mkisofs" /usr/local/bin/mkisofs
+
+ln -fs "$VMWARE_ROOT/mkisofs" /usr/local/bin/ntfscat
+
+vmware-vprobe

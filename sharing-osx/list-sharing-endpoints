@@ -1,0 +1,21 @@
+# list sharing endpoints
+sharing -l
+
+#remove share
+sharing -r "share name"
+
+#add share
+sharing -a <path> [options]
+
+#example
+sharing -a /Users/Shared/My_Sharepoint -A "My Share" -s 100 -g 000
+
+# show connected users & logins:
+last
+
+# also 'w'
+w
+
+#
+who # shows connected and external
+

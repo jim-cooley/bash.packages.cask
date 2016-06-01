@@ -1,0 +1,3 @@
+java -cp google-sites-liberation-1.0.1.jar com.google.sites.liberation.export.Main -d "region3dfg.org" -w "region3" -u <yourusers name here> -p <your-password-here> -f "E:\backups-of-google\region3"
+
+lsvfs # displays file system type information

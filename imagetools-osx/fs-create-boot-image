@@ -1,0 +1,147 @@
+#!/bin/bash
+# ---------------------------------------------------------------------------
+# Usage: createinstallmedia --volume <path to volume to convert> --applicationpath <path to Install OS X Mavericks.app> [--force]
+#
+# Arguments--volume, A path to a volume that can be unmounted and erased to create the install media.
+# --applicationpath, A path to copy of the OS installer application to create the bootable media from.
+# --nointeraction, Erase the disk pointed to by volume without prompting for confirmation.
+#
+# Example: createinstallmedia --volume /Volumes/Untitled --applicationpath /Applications/Install OS X Mavericks.app
+# ---------------------------------------------------------------------------
+
+#includes: 
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+
+source "$DIR/stderr"
+
+#
+# debug
+#
+trace
+
+#
+# variables & functions
+#
+force=0
+volume="/Volumes/Unknown"
+tag=
+rootdir="/Applications/Install OS X"
+app="app"
+verbose=0
+dryrun=0
+
+installer=
+root=
+
+#
+usage="
+fs-create-boot-usb [-h | -fivx | -volume] [Yosemite | El Capitan] 
+   -h       = print this message
+   -f       = force on errors
+   -i       = use installer [full path to installer]
+   -r       = specify root directory for installer
+   -v       = be verbose
+   -x       = dry run (print commands, do not execute)
+   -volume  = volume name (default is 'Unknown 1')
+   "
+
+#
+function get_installer() {
+	echo "$rootdir\\$1.$app"
+}
+
+#
+# start
+#
+while [[ $# -gt 0 ]] ; do
+	case "$1" in
+		-h | --help)
+			print_usage
+            ;;
+		-f | --force)
+			force=1
+            ;;
+		-i | --installer)
+			shift
+			fullname="$1"
+			rootdir="$(dirname "$fullname")"
+            rootname="$(basename "$fullname")"
+			root1="${rootname%%.*}"
+			root="${root1##* }"
+            installer="$root"
+			;;
+        -r | -root)
+            shift; rootdir="$1"
+            [ -d "$rootdir" ] || fatal "specified -root: '$rootdir' does not exist.'"
+            ;;
+		-x | -noexec | -dry | -dryrun)
+            dryrun=1
+            ;;
+        -v)
+			verbose=1
+            ;;
+		--volume)
+			shift && volume="/Volumes/$1"
+            ;;
+        *)
+            rootname="$1"
+            
+	esac
+	shift
+done
+
+[ -z "$rootname" ] && fatal "no installer root name specified. exiting."
+
+# if we were given a root, check if its valid:
+if [ ! -z "$rootname" ] ; then
+    rspec="$from '$rootdir'"
+    [ -z "$rootdir" ] && fullname="`get_installer "${rootname}"`"
+    [ -z "$rootdir" ] && rspec=
+
+    vmessage "installer for '$root' $rspec specified, validating"
+    vmessage "checking: $fullname"
+    
+	if [ ! -d "$fullname" ] ; then
+        vmessage "  not valid"
+        rootname=""
+    else
+        vmessage "  valid"
+    fi
+fi
+
+if [ -z "$rootname" ]; then
+    for root in "Yosemite" "El Capitan" "notfound"; do
+        fullname="`get_installer "${rootname}"`"
+        if [ -d "$fullname" ] ; then
+            break
+        fi
+    done
+fi
+
+if [[ "$rootname" == "notfound" ]] ; then
+	fatal "installer not found: \'$installer\'"
+fi
+
+# should also check rw
+if [ -z "$volume" ] || [ -d "$volume" ]; then
+    message "Building: %s from %s\n" "$root" "$installer"
+    message "Enter 'sudo' password to erase '$volume' :"
+else
+    fatal "volume: \'$volume\' not found"
+fi
+
+case "$root" in 
+	"Yosemite" | "El Capitan")
+        if [ $verbose -gt 0 ] || [ $dryrun -gt 0 ]; then
+            message "$installer/Contents/Resources/createinstallmedia --volume $volume --applicationpath $installer"
+        fi
+        if [ $dryrun -lt 1 ]; then
+		  sudo "$installer"/Contents/Resources/createinstallmedia --volume "$volume" --applicationpath "$installer"
+        fi
+        ;;
+	*)
+        fatal "Only Yosemite and El Capitan are supported at this time."
+        ;;
+esac
+

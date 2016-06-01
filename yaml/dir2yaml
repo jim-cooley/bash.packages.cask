@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import yaml
+import argparse
+from pyvert import convert_dir
+
+
+def main():
+
+    parser = argparse.ArgumentParser(description='generate a YAML file from'
+                                                 ' a given directory path')
+    parser.add_argument('-f', 
+                        action='append_const', 
+                        dest='options', 
+                        const='only-files', 
+                        default=[],
+                        help='list only files (no directories)')
+    parser.add_argument('-d', 
+                        action='append_const', 
+                        dest='options', 
+                        const='only-directories', 
+                        default=[],
+                        help='list only directories (no files)')
+    parser.add_argument('-n', 
+                        type=int,
+                        action='store', 
+                        dest='max-depth', 
+                        default=0,
+                        nargs='?',
+                        help='max depth of subdirectory traversal.'
+                             '0 (default) = full.')
+    parser.add_argument('path',
+                        nargs='?',
+                        help='path of target directory (leave empty to use '
+                             'current directory)')
+    args = parser.parse_args()
+
+    p = os.getcwd() if not args.path else os.path.abspath(args.path)
+
+    if not os.path.exists(p):
+        print("Path {} does not exist".format(p))
+        sys.exit(1)
+
+    try:
+        with open('{}.yaml'.format(os.path.basename(p)), 'w') as f:
+            try:
+                yaml.dump(convert_dir.to_dict(path=p), f, default_flow_style=False)
+                print('Dictionary written to {}.yaml'.format(os.path.basename(p)))
+                sys.exit(0)
+
+            except Exception as e:
+                print(e)
+                sys.exit(2)
+
+    except Exception as e:
+        print(e)
+        sys.exit(3)
+
+if __name__ == '__main__':
+    main()

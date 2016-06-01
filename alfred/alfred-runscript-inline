@@ -1,0 +1,24 @@
+echo "$PWD" > /Users/dev/output.out
+echo "./run-command runInFiles {query}" >> /Users/dev/output.out
+
+./run-command runInFiles "{query}" >> /Users/dev/output.out
+
+# send exit status
+exit_status="$?"
+
+if [[ "${exit_status}" == '0' ]]; then
+  exit_status='Success'
+  exit_message='The command finished successfully.'
+else
+  exit_sub="${exit_status} (exit status)"
+  exit_message="The command exited with an error."
+fi
+
+declare > /Users/dev/env-in-alfred.txt
+
+echo "" >> /Users/dev/output.out
+echo "$exit_message" >> /Users/dev/output.out
+echo "$exit_sub" >> /Users/dev/output.out
+
+/usr/local/bin/brackets /User/dev/env-in-alfred.txt
+

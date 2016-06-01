@@ -1,0 +1,21 @@
+#!/usr/bin/python
+
+import sys
+
+print "len: {0}, argv =\n{1}\n".format(len(sys.argv),sys.argv)
+
+def print_usage():
+	print "{0} -hfnv -r root -t name:template -u user-list +u user".format(sys.argv[0])
+	print "-h  = print this message"
+	print "-f  = force on errors"
+	print "-n  = dry-run, print commands but don't execute"
+	print "-r  = output to root (root)"
+	print "-t  = user template"
+	print "-u  = user list"
+	print "+u  = add user to standard list"
+	print "-v  = be verbose"
+
+
+print_usage()
+
+exit()

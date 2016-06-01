@@ -1,0 +1,133 @@
+#!/bin/bash
+# create new empty encrypted image
+#hdiutil create ../adobe-flash-player.dmg -encryption -type SPARSEBUNDLE -size 1g -srcfolder ./AdobeFlashPlayerInstaller_16_ltrosxd_aaa_aih-2.dmg -volname "QUAR-AdobeFlashPlayer" -fs JHFS+
+
+#
+# variables & functions
+#
+dryrun=0
+verbose=0
+encryption="-encryption" # encryption is the default
+location="."
+size="-size 100m"
+sized=0
+srcFolder=""
+volname="Unknown"
+vollabel=""
+voltype="-type SPARSEBUNDLE -fs HFS+J"
+verbosity=""
+
+function print_usage {
+	echo "
+fs-create-archive [options] image-name size
+
+  -h  = print this message
+  -e | -encryption	= create encrypted archive (default)
+  -f | -folder | -from  = specify a folder to copy into the archive
+  -l | -vollabel	= volume label (default is 'Unknown')
+  -n | -noencryption	= no excryption
+  -name 		= set both volume and label to 'name'
+  -s | -size 		= size ( ?? | ??b | ??k | ??m | ??g | ??t | ??p | ??e )
+                          default: 100m or size of source folder
+  -v | -verbose     = print additional information
+  -vol | -volname   = sets both volume name and volume label
+  -x | -dryrun | -noexec = dry run, printt but don't execute commands
+(default) 		= is taken as a volume name
+
+Notes:
+    fs-crate-archive is a wrapper on 'hdiutil' to facilitate common use scenariosl, so look to 'hdiutil create -help' for parameter information.
+    file system is set to JHFS+:SPARSEBUNDLE or appropriate value based on options selected.
+
+Examples:
+    fs-create-archive -s 3G
+"
+}
+
+function print_error() {
+	printf "ERROR: %s (%s).\n" "$1" "$2"
+	print_usage
+	exit 1
+}
+
+# verbosity=-1 can stop all messages (quiet)
+function print_message() {
+    if [ $verbose -ge 0 ]; then
+        printf "%s\n" "$@"
+    fi
+}
+
+# verbosity controlled message
+function verbose_message() {
+    if [ $verbose -gt 0 ]; then
+        print_message "$@"
+    fi
+}
+
+
+# check parameter count:
+if [[ $# -eq 0 ]] ; then
+	print_usage
+	exit 0
+fi
+
+#
+# parse parameters
+#
+while [[ $# -gt 0 ]] ; do
+	case "$1" in
+		-h | -help)
+			print_usage;;
+		-e | -encryption)
+			encryption="-encryption";;
+		-f | -folder | -from)
+			shift && srcfolder="-srcfolder $1";;
+		-l | -label)
+			shift && vollabel="-volname $1";;
+		-noencryption)
+			encryption="";;
+		-n | -name)
+			shift && volname="$1";;
+        -o | -out)
+            shift && location="$1";;
+		-s | -size)
+			sized=1
+			shift && size="-size $1";;
+        -v | -verbose)
+            verbose=1; verbosity="-verbose";;
+		-vol | -volname)
+			shift && volname="$1";;
+		-x | -dry | -dryrun | -noexec | -norun | -nox)
+			dryrun=1;;
+		*)
+			volname="$1";;
+	esac
+	shift
+done
+
+verbose_message "" "fs-create-archive" "parameters:" "  volname: $volname" "  vollabel: $vollabel" "  srcfolder: $srcfolder" ""
+
+#
+# check parameters:
+# if vollabel not explicitly specified, use an appropriate default:
+if [ -z "$vollabel" ]; then
+    vollabel="-volname $volname"
+fi
+
+# if size was defaulted and we specified a folder, use the default of that folder size and not our crummy default.
+if [ -n "$srcfolder" ]; then
+	voltype="-format SPARSEBUNDLE -fs HFS+J"
+#	vollabel=""
+	if [ $sized -eq 0 ]; then
+		size=""
+	fi
+fi
+
+
+#
+# start
+#
+if [[ $dryrun -gt 0 ]]; then
+	echo hdiutil create $verbosity $voltype $size $encryption $vollabel $srcfolder "$volname"
+else
+	hdiutil create $verbosity $voltype $size $encryption $vollabel $srcfolder "$volname"
+fi

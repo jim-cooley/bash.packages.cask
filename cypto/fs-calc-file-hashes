@@ -1,0 +1,19 @@
+#!/bin/bash
+
+OPENSSL=openssl
+md5=md5
+sh1=sha1
+
+function fs-get-hash () {
+	mode=$1
+	shift
+	h="`$OPENSSL $mode "${*}"`"
+	printf "%s" "${h#*$' '}"
+}
+
+function fs-calc-file-hashes () {
+  f="$*"
+  printf ",%s,%s\n" $md5=$(fs-get-hash $md5 "$f") $sh1=$(fs-get-hash $sh1 "$f")
+}
+
+fs-calc-file-hashes $*
