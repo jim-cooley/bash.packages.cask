@@ -1,0 +1,13 @@
+#prompts
+#green
+PS_GREEN='\n\[\033[1;30m\]$( pwd ):\n\[\033[38;5;34m\][${HOSTNAME%.} | \u ($EUID:$SHLVL)] \$  \[\033[;m\] '
+
+#yellow
+PS_YELLOW='\n\[\033[1;30m\]$( pwd ):\n\[\033[38;5;226m\][${HOSTNAME%.} : \u ($EUID:$SHLVL)] \$  \[\033[;m\] '
+
+#white
+PS_ALL_WHITE='\n\[\033[1;255m\]$( pwd ):\n\[\033[1;255m\][${HOSTNAME%.} : \u ($EUID:$SHLVL)] \$  \[\033[;m\] '
+PS_WHITE='\n\[\033[1;30m\]$( pwd ):\n\[\033[38;5;254m\][${HOSTNAME%.} : \u ($EUID:$SHLVL)] \$  \[\033[;m\] '
+export PS1="$PS_WHITE"
+export PS2='\[\033[1;37m\][ :\#     > \[\033[;m\] '
+#declare -x PS1='\n\[\033[1;30m\][ /bin/bash (4278:1) ] in \[\033[0;33m\]/Users/dev \[\033[1;30m\]: (55 entries, 0 hidden)\n\[\033[1;37m\][base : \u (503)] $  \[\033[;m\] ';
