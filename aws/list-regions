@@ -1,2 +1,0 @@
-
-aws ec2 describe-regions --query 'Regions[].[RegionName,Endpoint]' --output text
