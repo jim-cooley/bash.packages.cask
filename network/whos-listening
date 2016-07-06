@@ -1,3 +1,0 @@
-#!/bin/bash
-#sudo lsof -nP -iTCP -sTCP:LISTEN
-sudo lsof -nP | grep -i LISTEN
