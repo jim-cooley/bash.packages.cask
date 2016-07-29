@@ -1,8 +1,0 @@
-# update openssl
-
-# Grab a recent version of OpenSSL with:
-brew install openssl
-
-# and ensure it's the default with 
-brew link --force openssl
-
